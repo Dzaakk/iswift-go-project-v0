@@ -15,5 +15,6 @@ CREATE TABLE users(
     INDEX idx_users_email(`email`),
     INDEX idx_users_created_by(`created_by`),
     INDEX idx_users_updated_by(`updated_by`),
-    CONSTRAINT FK_users_created_by FOREIGN KEY (`created_by`) REFERENCES admins(`id`) ON DELETE SET NULL, CONSTRAINT FK_users_updated_by FOREIGN KEY (`updated_by`) REFERENCES admins(`id`) ON DELETE SET NULL
+    CONSTRAINT FK_users_created_by FOREIGN KEY (`created_by`) REFERENCES admins(`id`) ON DELETE SET NULL, 
+    CONSTRAINT FK_users_updated_by FOREIGN KEY (`updated_by`) REFERENCES admins(`id`) ON DELETE SET NULL
 )
