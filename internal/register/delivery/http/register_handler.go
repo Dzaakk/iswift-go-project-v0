@@ -1,9 +1,8 @@
 package register
 
 import (
-	"fmt"
-	dto "iswift-go-project/internal/register/dto"
 	registerUseCase "iswift-go-project/internal/register/usecase"
+	userDto "iswift-go-project/internal/user/dto"
 	"iswift-go-project/pkg/utils"
 	"net/http"
 
@@ -14,8 +13,8 @@ type RegisterHandler struct {
 	registerUseCase registerUseCase.RegisterUseCase
 }
 
-func NewRegisterHandler(registerUseCase registerUseCase.RegisterUseCase) RegisterHandler {
-	return RegisterHandler{registerUseCase}
+func NewRegisterHandler(registerUseCase registerUseCase.RegisterUseCase) *RegisterHandler {
+	return &RegisterHandler{registerUseCase}
 }
 
 func (rh *RegisterHandler) Route(r *gin.RouterGroup) {
@@ -24,11 +23,10 @@ func (rh *RegisterHandler) Route(r *gin.RouterGroup) {
 
 func (rh *RegisterHandler) Register(ctx *gin.Context) {
 	// Validate input
-	var registerRequestInput dto.CreateRegisterRequestBody
+	var registerRequestInput userDto.UserRequestBody
 
 	//validasi dari body yang dikirim menggunakan format json
 	if err := ctx.ShouldBindJSON(&registerRequestInput); err != nil {
-		fmt.Println("masuk ke dalam error")
 		ctx.JSON(http.StatusBadRequest, utils.Response(400, "bad request", err.Error()))
 		ctx.Abort()
 		return
