@@ -26,6 +26,7 @@ type UserUseCaseImpl struct {
 // Create implements UserUseCase
 func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, error) {
 	//Find by email
+	
 	checkUser, err := uu.repository.FindByEmail(*userDto.Email)
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
