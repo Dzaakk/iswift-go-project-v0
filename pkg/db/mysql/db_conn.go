@@ -1,9 +1,11 @@
 package mysql
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -13,6 +15,7 @@ func DB() *gorm.DB {
 	if err != nil {
 		panic("Error tidak dapat melakukan load .env")
 	}
+
 	host := os.Getenv("MYSQL_HOST")
 	port := os.Getenv("MYSQL_PORT")
 	dbname := os.Getenv("MYSQL_DATABASE")
@@ -20,5 +23,14 @@ func DB() *gorm.DB {
 	password := os.Getenv("MYSQL_PASSWORD")
 
 	dsn := username + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbname + "?charset=utf8&parseTime=true&loc=local"
-	db, err := gorm.Open(mysql.Open(dsn))
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		panic("Tidak dapat terkoneksi dengan database")
+	}
+
+	fmt.Println("Berhasil terkoneksidengan database")
+
+	return db
 }
