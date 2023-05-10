@@ -10,7 +10,7 @@ CREATE TABLE users(
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NULL,
     `deleted_at` TIMESTAMP NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
     UNIQUE KEY users_email_unique(`email`),
     INDEX idx_users_email(`email`),
     INDEX idx_users_created_by(`created_by`),

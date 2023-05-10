@@ -8,7 +8,7 @@ CREATE TABLE admins (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NULL,
     `deleted_at` TIMESTAMP NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
     UNIQUE KEY admins_email_unique(`email`),
     INDEX idx_admins_email(`email`),
     INDEX idx_admins_created_by(`created_by`),
