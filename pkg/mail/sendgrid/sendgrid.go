@@ -20,7 +20,7 @@ type MailImpl struct {
 }
 
 func (mi *MailImpl) sendMail(toEmail, result, subject string) {
-	from := mail.NewEMail(os.Getenv("MAIL_SENDER_NAME"), os.Getenv("MAIL_SENDER_NAME"))
+	from := mail.NewEmail(os.Getenv("MAIL_SENDER_NAME"), os.Getenv("MAIL_SENDER_NAME"))
 	to := mail.NewEmail(toEmail, toEmail)
 
 	messages := mail.NewSingleEmail(from, subject, to, "", result)
@@ -43,7 +43,7 @@ func (mi *MailImpl) SendVerifivationEmail(toEmail string, dto registerDto.Create
 	cwd, _ := os.Getwd()
 	templateFile := filepath.Join(cwd, "/templates/emails/verification_email.html")
 
-	result, err := ParseTemplate(templateFile)
+	result, err := ParseTemplate(templateFile, dto)
 
 	if err != nil {
 		fmt.Println(err)
@@ -54,9 +54,11 @@ func (mi *MailImpl) SendVerifivationEmail(toEmail string, dto registerDto.Create
 
 func ParseTemplate(templateFileName string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(templateFileName)
+
 	if err != nil {
 		return "", err
 	}
+
 	buf := new(bytes.Buffer)
 
 	if err := t.Execute(buf, data); err != nil {
