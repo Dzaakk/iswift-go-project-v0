@@ -28,10 +28,6 @@ func (ur *UserRepositoryImpl) FindByEmail(email string) (*entity.User, error) {
 	return &user, nil
 }
 
-func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
-	return &UserRepositoryImpl{db}
-}
-
 // FindAll implements UserRepository
 func (ur *UserRepositoryImpl) FindAll(offset int, limit int) []entity.User {
 	var users []entity.User
@@ -51,7 +47,7 @@ func (ur *UserRepositoryImpl) FindById(id int) (*entity.User, error) {
 	return &user, nil
 }
 
-// Save implements UserRepository
+// Create implements UserRepository
 func (ur *UserRepositoryImpl) Create(entity entity.User) (*entity.User, error) {
 	if err := ur.db.Create(entity).Error; err != nil {
 		return nil, err
@@ -73,4 +69,8 @@ func (ur *UserRepositoryImpl) Delete(entity entity.User) error {
 		return err
 	}
 	return nil
+}
+
+func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
+	return &UserRepositoryImpl{db}
 }
