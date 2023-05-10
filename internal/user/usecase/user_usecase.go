@@ -6,7 +6,6 @@ import (
 	dto "iswift-go-project/internal/user/dto"
 	entity "iswift-go-project/internal/user/entity"
 	repository "iswift-go-project/internal/user/repository"
-	"iswift-go-project/pkg/utils"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -24,10 +23,6 @@ type UserUseCaseImpl struct {
 	repository repository.UserRepository
 }
 
-func NewUserUseCase() UserUseCase {
-	return &UserUseCaseImpl{repository}
-}
-
 // Create implements UserUseCase
 func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, error) {
 	//Find by email
@@ -40,10 +35,12 @@ func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, er
 	if checkUser != nil {
 		return nil, errors.New("email sudah pernah terdaftar")
 	}
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userDto.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*userDto.Password), bcrypt.DefaultCost)
+
 	if err != nil {
 		return nil, err
 	}
+
 	user := entity.User{
 		Name:         *userDto.Name,
 		Email:        *userDto.Email,
@@ -51,7 +48,9 @@ func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, er
 		CodeVerified: utils.RandString(32),
 	}
 
+	// Create data
 	dataUser, err := uu.repository.Create(user)
+
 	if err != nil {
 		return nil, err
 	}
@@ -77,4 +76,8 @@ func (*UserUseCaseImpl) FindById(id int) (*entity.User, error) {
 // Update implements UserUseCase
 func (*UserUseCaseImpl) Update(userDto dto.UserRequestBody) (*entity.User, error) {
 	panic("unimplemented")
+}
+
+func NewUserUseCase(repository repository.UserRepository) UserUseCase {
+	return &UserUseCaseImpl{repository}
 }
