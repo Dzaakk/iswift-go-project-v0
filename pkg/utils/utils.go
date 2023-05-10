@@ -10,7 +10,7 @@ func RandString(number int) string {
 	b := make([]rune, number)
 
 	for i := range b {
-		b[i] = letterRunes[rand.Int(len(letterRunes))]
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 
 	return string(b)
