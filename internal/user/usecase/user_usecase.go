@@ -2,7 +2,7 @@ package user
 
 import (
 	"errors"
-	utils "iswift-go-project/internal/pkg/utils"
+	utils "iswift-go-project/pkg/utils"
 	dto "iswift-go-project/internal/user/dto"
 	entity "iswift-go-project/internal/user/entity"
 	repository "iswift-go-project/internal/user/repository"
@@ -26,7 +26,7 @@ type UserUseCaseImpl struct {
 // Create implements UserUseCase
 func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, error) {
 	//Find by email
-	
+
 	checkUser, err := uu.repository.FindByEmail(*userDto.Email)
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
