@@ -2,10 +2,10 @@ package user
 
 import (
 	"errors"
-	utils "iswift-go-project/pkg/utils"
 	dto "iswift-go-project/internal/user/dto"
 	entity "iswift-go-project/internal/user/entity"
 	repository "iswift-go-project/internal/user/repository"
+	utils "iswift-go-project/pkg/utils"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -14,6 +14,7 @@ import (
 type UserUseCase interface {
 	FindAll(offset, limit int) []entity.User
 	FindById(id int) (*entity.User, error)
+	FindByEmail(email string) (*entity.User, error)
 	Create(userDto dto.UserRequestBody) (*entity.User, error)
 	Update(userDto dto.UserRequestBody) (*entity.User, error)
 	Delete(id int) error
@@ -23,11 +24,16 @@ type UserUseCaseImpl struct {
 	repository repository.UserRepository
 }
 
+// FindByEmail implements UserUseCase
+func (usecase *UserUseCaseImpl) FindByEmail(email string) (*entity.User, error) {
+	return usecase.repository.FindByEmail(email)
+}
+
 // Create implements UserUseCase
-func (uu *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, error) {
+func (usecase *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.User, error) {
 	//Find by email
 
-	checkUser, err := uu.repository.FindByEmail(*userDto.Email)
+	checkUser, err := usecase.repository.FindByEmail(*userDto.Email)
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
