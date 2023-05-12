@@ -56,7 +56,7 @@ func (usecase *UserUseCaseImpl) Create(userDto dto.UserRequestBody) (*entity.Use
 	}
 
 	// Create data
-	dataUser, err := uu.repository.Create(user)
+	dataUser, err := usecase.repository.Create(user)
 
 	if err != nil {
 		return nil, err
