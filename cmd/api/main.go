@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	mysql.DB()
+	db := mysql.DB()
 
 	r := gin.Default()
 	mail := sendgrid.NewMail()
