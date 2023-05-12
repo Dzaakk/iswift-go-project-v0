@@ -80,7 +80,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 
 	// Insert data ke table oauth access token
 	dataOauthAccessToken := entity.OauthAccessToken{
-		OauthClientID: oauthClient.ID,
+		OauthClientID: &oauthClient.ID,
 		UserID:        user.ID,
 		Token:         tokenString,
 		Scope:         "*",
