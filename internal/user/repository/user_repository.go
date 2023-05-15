@@ -71,6 +71,6 @@ func (ur *UserRepositoryImpl) Delete(entity entity.User) error {
 	return nil
 }
 
-func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{db}
 }
