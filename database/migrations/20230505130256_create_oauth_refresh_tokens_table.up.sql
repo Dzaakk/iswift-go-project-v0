@@ -11,6 +11,6 @@ CREATE TABLE oauth_access_tokens(
     UNIQUE KEY oauth_refresh_tokens_token_unique (`token`),
     INDEX idx_oauth_refresh_tokens_oauth_access_token_id (`oauth_access_token_id`),
     INDEX idx_oauth_refresh_tokens_token (`token`),
-    CONSTRAINT FK_oauth_access_token_id FOREIGN KEY (`oatuh_access_token_id`) REFERENCES oauth_access_tokens(`id`) ON DELETE SET NULL
+    CONSTRAINT FK_oauth_access_token_id FOREIGN KEY (`oauth_access_token_id`) REFERENCES oauth_access_tokens(`id`) ON DELETE SET NULL
     
 )

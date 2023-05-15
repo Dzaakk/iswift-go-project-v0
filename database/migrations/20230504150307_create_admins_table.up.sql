@@ -1,8 +1,8 @@
 CREATE TABLE admins (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255), NOT NULL,
-    `email` VARCHAR(255), NOT NULL,
-    `password` VARCHAR(255), NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `created_by` INT NULL,
     `updated_by` INT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
