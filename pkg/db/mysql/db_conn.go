@@ -30,7 +30,7 @@ func DB() *gorm.DB {
 		panic("Tidak dapat terkoneksi dengan database")
 	}
 
-	fmt.Println("Berhasil terkoneksidengan database")
+	fmt.Println("berhasil terkoneksi dengan database")
 
 	return db
 }
