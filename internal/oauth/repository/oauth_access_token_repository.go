@@ -18,7 +18,7 @@ type OauthAccessTokenRepositoryImpl struct {
 
 // create implements OauthAccessTokenRepository
 func (repository *OauthAccessTokenRepositoryImpl) Create(oauthAccessToken entity.OauthAccessToken) (*entity.OauthAccessToken, error) {
-	if err := repository.db.Create(oauthAccessToken).Error; err != nil {
+	if err := repository.db.Create(&oauthAccessToken).Error; err != nil {
 		fmt.Println(err)
 
 		return nil, err
