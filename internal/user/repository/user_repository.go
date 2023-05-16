@@ -25,6 +25,7 @@ func (ur *UserRepositoryImpl) FindByEmail(email string) (*entity.User, error) {
 	if err := ur.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
+
 	return &user, nil
 }
 
@@ -49,7 +50,7 @@ func (ur *UserRepositoryImpl) FindById(id int) (*entity.User, error) {
 
 // Create implements UserRepository
 func (ur *UserRepositoryImpl) Create(entity entity.User) (*entity.User, error) {
-	if err := ur.db.Create(entity).Error; err != nil {
+	if err := ur.db.Create(&entity).Error; err != nil {
 		return nil, err
 	}
 	return &entity, nil
@@ -57,7 +58,7 @@ func (ur *UserRepositoryImpl) Create(entity entity.User) (*entity.User, error) {
 
 // Update implements UserRepository
 func (ur *UserRepositoryImpl) Update(entity entity.User) (*entity.User, error) {
-	if err := ur.db.Save(entity).Error; err != nil {
+	if err := ur.db.Save(&entity).Error; err != nil {
 		return nil, err
 	}
 	return &entity, nil
