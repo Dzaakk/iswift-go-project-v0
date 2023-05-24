@@ -19,6 +19,6 @@ CREATE TABLE orders (
     INDEX idx_orders_updated_by (`updated_by`),
     CONSTRAINT FK_orders_user_id FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE SET NULL,
     CONSTRAINT FK_orders_discount_id FOREIGN KEY (`discount_id`) REFERENCES discounts(`id`)  ON DELETE SET NULL,
-    CONSTRAINT FK_orders_created_by FOREIGN KEY (`created_by`) REFERENCES admins(`id`) ON DELETE SET NULL, 
-    CONSTRAINT FK_orders_updated_by FOREIGN KEY (`updated_by`) REFERENCES admins(`id`) ON DELETE SET NULL
+    CONSTRAINT FK_orders_created_by FOREIGN KEY (`created_by`) REFERENCES users(`id`) ON DELETE SET NULL, 
+    CONSTRAINT FK_orders_updated_by FOREIGN KEY (`updated_by`) REFERENCES users(`id`) ON DELETE SET NULL
 )
