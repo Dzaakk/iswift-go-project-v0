@@ -2,6 +2,10 @@ package utils
 
 import (
 	"math/rand"
+
+	oauthDto "iswift-go-project/internal/oauth/dto"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RandString(number int) string {
@@ -14,4 +18,10 @@ func RandString(number int) string {
 	}
 
 	return string(b)
+}
+
+func GetCurrentUser(ctx *gin.Context) *oauthDto.MapClaimsResponse {
+	user, _ := ctx.Get("user")
+
+	return user.(*oauthDto.MapClaimsResponse)
 }
