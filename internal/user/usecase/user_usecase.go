@@ -76,8 +76,9 @@ func (*UserUseCaseImpl) FindAll(offset int, limit int) []entity.User {
 }
 
 // FindById implements UserUseCase
-func (*UserUseCaseImpl) FindById(id int) (*entity.User, error) {
-	panic("unimplemented")
+func (usecase *UserUseCaseImpl) FindById(id int) (*entity.User, error) {
+	return usecase.repository.FindById(id)
+
 }
 
 // Update implements UserUseCase
