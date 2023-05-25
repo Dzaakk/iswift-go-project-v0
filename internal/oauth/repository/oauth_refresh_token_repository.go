@@ -18,7 +18,7 @@ type OauthRefreshTokenRepositoryImpl struct {
 
 // Create implements OauthRefreshTokenRepository
 func (repository *OauthRefreshTokenRepositoryImpl) Create(oauthRefreshToken entity.OauthRefreshToken) (*entity.OauthRefreshToken, error) {
-	if err := repository.db.Create(*&oauthRefreshToken).Error; err != nil {
+	if err := repository.db.Create(&oauthRefreshToken).Error; err != nil {
 		return nil, err
 	}
 
