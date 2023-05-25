@@ -17,7 +17,7 @@ func NewOauthHandler(usecase usecase.OauthUseCase) *OauthHandler {
 	return &OauthHandler{usecase}
 }
 
-func (handler *OauthHandler) Router(r *gin.RouterGroup) {
+func (handler *OauthHandler) Route(r *gin.RouterGroup) {
 	oauthRouter := r.Group("/api/v1")
 
 	oauthRouter.POST("/oauth", handler.Login)
