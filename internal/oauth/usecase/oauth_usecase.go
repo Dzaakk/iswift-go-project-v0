@@ -3,6 +3,7 @@ package oauth
 import (
 	"database/sql"
 	"errors"
+	AdminUseCase "iswift-go-project/internal/admin/usecase"
 	dto "iswift-go-project/internal/oauth/dto"
 	entity "iswift-go-project/internal/oauth/entity"
 	repository "iswift-go-project/internal/oauth/repository"
@@ -25,6 +26,7 @@ type OauthUseCaseImpl struct {
 	oauthAccessTokenRepository  repository.OauthAccessTokenRepository
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository
 	userUseCase                 userUseCase.UserUseCase
+	adminUsecase                AdminUseCase.AdminUseCase
 }
 
 // Login implements OauthUseCase
@@ -130,6 +132,14 @@ func NewOauthUseCase(
 	oauthAccessTokenRepository repository.OauthAccessTokenRepository,
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository,
 	userUseCase userUseCase.UserUseCase,
+	adminuseCase AdminUseCase.AdminUseCase,
+
 ) OauthUseCase {
-	return &OauthUseCaseImpl{oauthClientRepository, oauthAccessTokenRepository, oauthRefreshTokenRepository, userUseCase}
+	return &OauthUseCaseImpl{
+		oauthClientRepository,
+		oauthAccessTokenRepository,
+		oauthRefreshTokenRepository,
+		userUseCase,
+		adminuseCase,
+	}
 }
