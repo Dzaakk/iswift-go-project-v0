@@ -40,18 +40,31 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 	}
 
 	var user dto.UserResponse
+	// Login menggunakan admin
+	if oauthClient.Name == "web-admin" {
+		dataAdmin, err := usecase.adminUsecase.FindByEmail(loginRequestBody.Email)
 
-	// Login menggunakan user
-	dataUser, err := usecase.userUseCase.FindByEmail(loginRequestBody.Email)
+		if err != nil {
+			return nil, errors.New("email or password is invalid")
+		}
 
-	if err != nil {
-		return nil, errors.New("username or password is invalid")
+		user.ID = dataAdmin.ID
+		user.Email = dataAdmin.Email
+		user.Password = dataAdmin.Password
+
+	} else {
+		// Login menggunakan user
+		dataUser, err := usecase.userUseCase.FindByEmail(loginRequestBody.Email)
+
+		if err != nil {
+			return nil, errors.New("username or password is invalid")
+		}
+
+		user.ID = dataUser.ID
+		user.Name = dataUser.Name
+		user.Email = dataUser.Email
+		user.Password = dataUser.Password
 	}
-
-	user.ID = dataUser.ID
-	user.Name = dataUser.Name
-	user.Email = dataUser.Email
-	user.Password = dataUser.Password
 
 	jwtKey := []byte(os.Getenv("JWT_SECRET"))
 
@@ -65,12 +78,16 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 
 	claims := &dto.ClaimsResponse{
 		ID:      user.ID,
-		Name:    user.Name,
 		Email:   user.Email,
-		IsAdmin: false,
+		Name:    user.Name,
+		IsAdmin: true,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
+	}
+
+	if oauthClient.Name != "web-admin" {
+		claims.IsAdmin = false
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
