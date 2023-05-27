@@ -1,8 +1,11 @@
 //go:build wireinject
 // +build wireinject
+
 package oauth
 
 import (
+	adminRepository "iswift-go-project/internal/admin/repository"
+	adminUseCase "iswift-go-project/internal/admin/usecase"
 	oauthHandler "iswift-go-project/internal/oauth/delivery/http"
 	oauthRepository "iswift-go-project/internal/oauth/repository"
 	oauthUseCase "iswift-go-project/internal/oauth/usecase"
@@ -22,6 +25,8 @@ func InitializedService(db *gorm.DB) *oauthHandler.OauthHandler {
 		oauthUseCase.NewOauthUseCase,
 		userRepository.NewUserRepository,
 		userUseCase.NewUserUseCase,
+		adminRepository.NewAdminRepository,
+		adminUseCase.NewAdminUseCase,
 	)
 
 	return &oauthHandler.OauthHandler{}
