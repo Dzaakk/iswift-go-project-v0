@@ -5,6 +5,7 @@ import "database/sql"
 type Admin struct {
 	ID          int64        `json:"id"`
 	Email       string       `json:"email"`
+	Name        string       `json:"name"`
 	Password    string       `json:"password"`
 	CreatedBy   *Admin       `gorm:"foreignKey:CreatedByID;references:ID"`
 	CreatedByID string       `json:"created_by"`

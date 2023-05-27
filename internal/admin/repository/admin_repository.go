@@ -20,25 +20,37 @@ type AdminRepositoryImpl struct {
 }
 
 // Create implements AdminRepository.
-func (*AdminRepositoryImpl) Create(entity entity.Admin) (*entity.Admin, error) {
-	panic("unimplemented")
+func (repository *AdminRepositoryImpl) Create(entity entity.Admin) (*entity.Admin, error) {
+	if err := repository.db.Create(&entity).Error; err != nil {
+		return nil, err
+	}
+
+	return &entity, nil
 }
 
 // Delete implements AdminRepository.
-func (*AdminRepositoryImpl) Delete(entity entity.Admin) error {
-	panic("unimplemented")
+func (repository *AdminRepositoryImpl) Delete(entity entity.Admin) error {
+	if err := repository.db.Save(&entity).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // FindAll implements AdminRepository.
-func (*AdminRepositoryImpl) FindAll(offset int, limit int) []entity.Admin {
-	panic("unimplemented")
+func (repository *AdminRepositoryImpl) FindAll(offset int, limit int) []entity.Admin {
+	var admins []entity.Admin
+
+	repository.db.Find(&admins)
+
+	return admins
 }
 
 // FindByEmail implements AdminRepository.
-func (adminRepository *AdminRepositoryImpl) FindByEmail(email string) (*entity.Admin, error) {
+func (repository *AdminRepositoryImpl) FindByEmail(email string) (*entity.Admin, error) {
 	var admin entity.Admin
 
-	if err := adminRepository.db.Where("email = ?", email).First(&admin).Error; err != nil {
+	if err := repository.db.Where("email = ?", email).First(&admin).Error; err != nil {
 		return nil, err
 	}
 
@@ -46,13 +58,22 @@ func (adminRepository *AdminRepositoryImpl) FindByEmail(email string) (*entity.A
 }
 
 // FindById implements AdminRepository.
-func (*AdminRepositoryImpl) FindById(id int) (*entity.Admin, error) {
-	panic("unimplemented")
+func (repository *AdminRepositoryImpl) FindById(id int) (*entity.Admin, error) {
+	var admin entity.Admin
+
+	if err := repository.db.First(&admin, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &admin, nil
 }
 
 // Update implements AdminRepository.
-func (*AdminRepositoryImpl) Update(entity entity.Admin) (*entity.Admin, error) {
-	panic("unimplemented")
+func (repository *AdminRepositoryImpl) Update(entity entity.Admin) (*entity.Admin, error) {
+	if err := repository.db.Save(&entity).Error; err != nil {
+		return nil, err
+	}
+	return &entity, nil
 }
 
 func NewAdminRepository() AdminRepository {
