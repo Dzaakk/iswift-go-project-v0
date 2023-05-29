@@ -30,7 +30,7 @@ func (repository *AdminRepositoryImpl) Create(entity entity.Admin) (*entity.Admi
 
 // Delete implements AdminRepository.
 func (repository *AdminRepositoryImpl) Delete(entity entity.Admin) error {
-	if err := repository.db.Save(&entity).Error; err != nil {
+	if err := repository.db.Delete(&entity).Error; err != nil {
 		return err
 	}
 
