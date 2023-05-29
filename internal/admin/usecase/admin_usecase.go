@@ -4,6 +4,8 @@ import (
 	dto "iswift-go-project/internal/admin/dto"
 	entity "iswift-go-project/internal/admin/entity"
 	repository "iswift-go-project/internal/admin/repository"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AdminUseCase interface {
@@ -11,7 +13,7 @@ type AdminUseCase interface {
 	FindById(id int) (*entity.Admin, error)
 	FindByEmail(email string) (*entity.Admin, error)
 	Create(dto dto.AdminRequestBody) (*entity.Admin, error)
-	Update(dto dto.AdminRequestBody) (*entity.Admin, error)
+	Update(id int, dto dto.AdminRequestBody) (*entity.Admin, error)
 	Delete(id int) error
 }
 
@@ -20,18 +22,49 @@ type AdminUseCaseImpl struct {
 }
 
 // Create implements AdminUseCase.
-func (*AdminUseCaseImpl) Create(dto dto.AdminRequestBody) (*entity.Admin, error) {
-	panic("unimplemented")
+func (usecase *AdminUseCaseImpl) Create(dto dto.AdminRequestBody) (*entity.Admin, error) {
+	hasherPassword, err := bcrypt.GenerateFromPassword([]byte(*dto.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		return nil, err
+	}
+	dataAdmin := entity.Admin{
+		Email:       dto.Email,
+		Name:        dto.Name,
+		Password:    string(hasherPassword),
+		CreatedByID: dto.CreatedBy,
+	}
+
+	admin, err := usecase.repository.Create(dataAdmin)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return admin, nil
+
 }
 
 // Delete implements AdminUseCase.
-func (*AdminUseCaseImpl) Delete(id int) error {
-	panic("unimplemented")
+func (usecase *AdminUseCaseImpl) Delete(id int) error {
+	// Search dari table admin berdasarkan id
+
+	admin, err := usecase.repository.FindById(id)
+
+	if err != nil {
+		return err
+	}
+
+	if err := usecase.repository.Delete(*admin); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // FindAll implements AdminUseCase.
-func (*AdminUseCaseImpl) FindAll(offset int, limit int) []entity.Admin {
-	panic("unimplemented")
+func (usecase *AdminUseCaseImpl) FindAll(offset int, limit int) []entity.Admin {
+	return usecase.repository.FindAll(offset, limit)
 }
 
 // FindByEmail implements AdminUseCase.
@@ -40,13 +73,44 @@ func (usecase *AdminUseCaseImpl) FindByEmail(email string) (*entity.Admin, error
 }
 
 // FindById implements AdminUseCase.
-func (*AdminUseCaseImpl) FindById(id int) (*entity.Admin, error) {
-	panic("unimplemented")
+func (usecase *AdminUseCaseImpl) FindById(id int) (*entity.Admin, error) {
+	return usecase.repository.FindById(id)
 }
 
 // Update implements AdminUseCase.
-func (*AdminUseCaseImpl) Update(dto dto.AdminRequestBody) (*entity.Admin, error) {
-	panic("unimplemented")
+func (usecase *AdminUseCaseImpl) Update(id int, dto dto.AdminRequestBody) (*entity.Admin, error) {
+	// Search Berdasarkan id
+	admin, err := usecase.repository.FindById(id)
+
+	admin.Name = dto.Name
+
+	// Validasi admin email jika tidak sama maka akan diupdate
+	if admin.Email != dto.Email {
+		admin.Email = dto.Email
+	}
+	if dto.Password != nil {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*dto.Password), bcrypt.DefaultCost)
+
+		if err != nil {
+			return nil, err
+		}
+		admin.Password = string(hashedPassword)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	admin.UpdatedByID = &dto.UpdatedBy
+
+	// Update admin dengan memanggil repository
+	updateAdmin, err := usecase.repository.Update(*admin)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updateAdmin, nil
 }
 
 func NewAdminUseCase(repository repository.AdminRepository) AdminUseCase {
