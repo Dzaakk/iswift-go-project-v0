@@ -1,6 +1,7 @@
 package main
 
 import (
+	admin "iswift-go-project/internal/admin/injector"
 	oauth "iswift-go-project/internal/oauth/injector"
 	profile "iswift-go-project/internal/profile/injector"
 	register "iswift-go-project/internal/register/injector"
@@ -17,7 +18,8 @@ func main() {
 	register.InitializedService(db).Route(&r.RouterGroup)
 	oauth.InitializedService(db).Route(&r.RouterGroup)
 	profile.InitializedService(db).Route(&r.RouterGroup)
-
+	admin.InitializedService(db).Route(&r.RouterGroup)
+	
 	r.Run()
 
 }
