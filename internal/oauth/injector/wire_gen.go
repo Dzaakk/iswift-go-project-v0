@@ -25,7 +25,7 @@ func InitializedService(db *gorm.DB) *oauth.OauthHandler {
 	oauthRefreshTokenRepository := oauth2.NewOauthRefreshTokenRepository(db)
 	userRepository := user.NewUserRepository(db)
 	userUseCase := user2.NewUserUseCase(userRepository)
-	adminRepository := admin.NewAdminRepository()
+	adminRepository := admin.NewAdminRepository(db)
 	adminUseCase := admin2.NewAdminUseCase(adminRepository)
 	oauthUseCase := oauth3.NewOauthUseCase(oauthClientRepository, oauthAccessTokenRepository, oauthRefreshTokenRepository, userUseCase, adminUseCase)
 	oauthHandler := oauth.NewOauthHandler(oauthUseCase)

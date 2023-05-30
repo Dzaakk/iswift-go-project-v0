@@ -18,8 +18,8 @@ type OauthRefreshTokenRepositoryImpl struct {
 
 // Create implements OauthRefreshTokenRepository
 func (repository *OauthRefreshTokenRepositoryImpl) Create(oauthRefreshToken entity.OauthRefreshToken) (*entity.OauthRefreshToken, error) {
-	if err := repository.db.Create(&oauthRefreshToken).Error; err != nil {
-		return nil, err
+	if result := repository.db.Create(&oauthRefreshToken).Error; result != nil {
+		return nil, result
 	}
 
 	return &oauthRefreshToken, nil
@@ -40,7 +40,7 @@ func (repository *OauthRefreshTokenRepositoryImpl) Delete(id int) error {
 func (repository *OauthRefreshTokenRepositoryImpl) FindOneByToken(token string) (*entity.OauthRefreshToken, error) {
 	var oauthRefreshToken entity.OauthRefreshToken
 
-	if err := repository.db.Where("token = ? ", token).First(&oauthRefreshToken).Error; err != nil {
+	if err := repository.db.Where("token = ?", token).First(&oauthRefreshToken).Error; err != nil {
 		return nil, err
 	}
 

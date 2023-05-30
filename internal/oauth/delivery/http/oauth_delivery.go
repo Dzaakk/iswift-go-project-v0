@@ -1,6 +1,7 @@
 package oauth
 
 import (
+	"fmt"
 	dto "iswift-go-project/internal/oauth/dto"
 	usecase "iswift-go-project/internal/oauth/usecase"
 	"iswift-go-project/pkg/utils"
@@ -27,6 +28,7 @@ func (handler *OauthHandler) Login(ctx *gin.Context) {
 	var input dto.LoginRequestBody
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
+		fmt.Print(err)
 		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, "bad request", err.Error()))
 		ctx.Abort()
 		return
@@ -34,12 +36,13 @@ func (handler *OauthHandler) Login(ctx *gin.Context) {
 
 	// Memanggil usecase dari login
 	data, err := handler.usecase.Login(input)
+
 	if err != nil {
+		fmt.Print(err)
 		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "error", err.Error()))
 		ctx.Abort()
 		return
 	}
 
 	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
-
 }

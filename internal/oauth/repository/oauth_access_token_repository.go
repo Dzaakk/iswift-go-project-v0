@@ -16,10 +16,10 @@ type OauthAccessTokenRepositoryImpl struct {
 	db *gorm.DB
 }
 
-// create implements OauthAccessTokenRepository
+// Create implements OauthAccessTokenRepository
 func (repository *OauthAccessTokenRepositoryImpl) Create(oauthAccessToken entity.OauthAccessToken) (*entity.OauthAccessToken, error) {
 	if err := repository.db.Create(&oauthAccessToken).Error; err != nil {
-		fmt.Println(err)
+		fmt.Print(err)
 
 		return nil, err
 	}
