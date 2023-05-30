@@ -3,6 +3,7 @@ package admin
 import (
 	dto "iswift-go-project/internal/admin/dto"
 	usecase "iswift-go-project/internal/admin/usecase"
+	"iswift-go-project/internal/middleware"
 	"iswift-go-project/pkg/utils"
 	"net/http"
 	"strconv"
@@ -16,6 +17,20 @@ type AdminHandler struct {
 
 func NewAdminHandler(usecase usecase.AdminUseCase) *AdminHandler {
 	return &AdminHandler{usecase}
+}
+
+func (handler *AdminHandler) Route(r *gin.RouterGroup) {
+	adminRouter := r.Group("api/v1")
+
+	adminRouter.Use(middleware.AuthJWT, middleware.AuthAdmin)
+	{
+		adminRouter.GET("/admins", handler.FindAll)
+		adminRouter.GET("/admins/:id", handler.FindById)
+		adminRouter.POST("/admins", handler.Create)
+		adminRouter.PATCH("/admins/:id", handler.Update)
+		adminRouter.DELETE("/admins/:id", handler.Delete)
+
+	}
 }
 
 func (handler *AdminHandler) Create(ctx *gin.Context) {
@@ -68,4 +83,42 @@ func (handler *AdminHandler) Update(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
+}
+
+func (handler *AdminHandler) FindAll(ctx *gin.Context) {
+	// api/v1/admins?offset=1&limit=5
+	offset, _ := strconv.Atoi(ctx.Query("offset"))
+	limit, _ := strconv.Atoi(ctx.Query("limit"))
+
+	data := handler.usecase.FindAll(offset, limit)
+
+	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
+}
+
+func (handler *AdminHandler) FindById(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	data, err := handler.usecase.FindById(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, utils.Response(http.StatusNotFound, "data not found", "data not found"))
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
+}
+
+func (handler *AdminHandler) Delete(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	err := handler.usecase.Delete(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, utils.Response(http.StatusNotFound, "data not found", "data not found"))
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", "ok"))
 }
