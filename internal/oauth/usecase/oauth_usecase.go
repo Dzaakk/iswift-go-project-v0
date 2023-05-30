@@ -3,7 +3,7 @@ package oauth
 import (
 	"database/sql"
 	"errors"
-	AdminUseCase "iswift-go-project/internal/admin/usecase"
+	adminUseCase "iswift-go-project/internal/admin/usecase"
 	dto "iswift-go-project/internal/oauth/dto"
 	entity "iswift-go-project/internal/oauth/entity"
 	repository "iswift-go-project/internal/oauth/repository"
@@ -26,7 +26,7 @@ type OauthUseCaseImpl struct {
 	oauthAccessTokenRepository  repository.OauthAccessTokenRepository
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository
 	userUseCase                 userUseCase.UserUseCase
-	adminUsecase                AdminUseCase.AdminUseCase
+	adminUseCase                adminUseCase.AdminUseCase
 }
 
 // Login implements OauthUseCase
@@ -42,7 +42,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 	var user dto.UserResponse
 	// Login menggunakan admin
 	if oauthClient.Name == "web-admin" {
-		dataAdmin, err := usecase.adminUsecase.FindByEmail(loginRequestBody.Email)
+		dataAdmin, err := usecase.adminUseCase.FindByEmail(loginRequestBody.Email)
 
 		if err != nil {
 			return nil, errors.New("email or password is invalid")
@@ -149,7 +149,7 @@ func NewOauthUseCase(
 	oauthAccessTokenRepository repository.OauthAccessTokenRepository,
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository,
 	userUseCase userUseCase.UserUseCase,
-	adminuseCase AdminUseCase.AdminUseCase,
+	adminUseCase adminUseCase.AdminUseCase,
 
 ) OauthUseCase {
 	return &OauthUseCaseImpl{
@@ -157,6 +157,6 @@ func NewOauthUseCase(
 		oauthAccessTokenRepository,
 		oauthRefreshTokenRepository,
 		userUseCase,
-		adminuseCase,
+		adminUseCase,
 	}
 }
