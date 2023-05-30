@@ -76,6 +76,6 @@ func (repository *AdminRepositoryImpl) Update(entity entity.Admin) (*entity.Admi
 	return &entity, nil
 }
 
-func NewAdminRepository() AdminRepository {
-	return &AdminRepositoryImpl{}
+func NewAdminRepository(db *gorm.DB) AdminRepository {
+	return &AdminRepositoryImpl{db}
 }
