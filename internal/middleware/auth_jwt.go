@@ -16,7 +16,7 @@ type Header struct {
 	Authorization string `header:"authorization" binding:"required"`
 }
 
-func AuthJWT(ctx *gin.Context) {
+func AuthJwt(ctx *gin.Context) {
 	var input Header
 
 	if err := ctx.ShouldBindHeader(&input); err != nil {
