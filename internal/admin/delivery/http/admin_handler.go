@@ -20,17 +20,17 @@ func NewAdminHandler(usecase usecase.AdminUseCase) *AdminHandler {
 }
 
 func (handler *AdminHandler) Route(r *gin.RouterGroup) {
-	adminRouter := r.Group("api/v1")
+	adminRouter := r.Group("/api/v1")
 
-	adminRouter.Use(middleware.AuthJWT, middleware.AuthAdmin)
+	adminRouter.Use(middleware.AuthJwt, middleware.AuthAdmin)
 	{
 		adminRouter.GET("/admins", handler.FindAll)
 		adminRouter.GET("/admins/:id", handler.FindById)
 		adminRouter.POST("/admins", handler.Create)
-		adminRouter.PATCH("/admins/:id", handler.Update)
-		adminRouter.DELETE("/admins/:id", handler.Delete)
-
+		adminRouter.PATCH("admins/:id", handler.Update)
+		adminRouter.DELETE("admins/:id", handler.Delete)
 	}
+
 }
 
 func (handler *AdminHandler) Create(ctx *gin.Context) {
@@ -50,7 +50,7 @@ func (handler *AdminHandler) Create(ctx *gin.Context) {
 	_, err := handler.usecase.Create(input)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, "bad request", err.Error()))
+		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server error", err.Error()))
 		ctx.Abort()
 		return
 	}
