@@ -2,6 +2,7 @@ package admin
 
 import (
 	entity "iswift-go-project/internal/admin/entity"
+	"iswift-go-project/pkg/utils"
 
 	"gorm.io/gorm"
 )
@@ -41,7 +42,7 @@ func (repository *AdminRepositoryImpl) Delete(entity entity.Admin) error {
 func (repository *AdminRepositoryImpl) FindAll(offset int, limit int) []entity.Admin {
 	var admins []entity.Admin
 
-	repository.db.Find(&admins)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Find(&admins)
 
 	return admins
 }
