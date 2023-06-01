@@ -10,7 +10,7 @@ type ProductCategoryUseCase interface {
 	FindAll(offset, limit int) []entity.ProductCategory
 	FindById(id int) (*entity.ProductCategory, error)
 	Create(dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, error)
-	Update(dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, error)
+	Update(id int, dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, error)
 	Delete(id int) error
 }
 
@@ -49,8 +49,25 @@ func (usecase *ProductCategoryUseCaseImpl) FindById(id int) (*entity.ProductCate
 }
 
 // Update implements ProductCategoryUseCase.
-func (*ProductCategoryUseCaseImpl) Update(dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, error) {
-	panic("unimplemented")
+func (usecase *ProductCategoryUseCaseImpl) Update(id int, dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, error) {
+	// Cari data product category berdasarkan id
+	productCategory, err := usecase.repository.FindById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	productCategory.Name = dto.Name
+	productCategory.UpdatedByID = &dto.UpdatedBy
+
+	// Memanggil repository untuk melakukan update
+
+	updateProductCategory, err := usecase.repository.Update(*productCategory)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updateProductCategory, nil
 }
 
 func NewProductCategoryUseCase(repository repository.ProductcategoryRepository) ProductCategoryUseCase {
