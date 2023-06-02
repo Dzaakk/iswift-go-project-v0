@@ -20,29 +20,29 @@ type ProductRepositoryImpl struct {
 }
 
 // Create implements ProductRepository.
-func (Repository *ProductRepositoryImpl) Create(entity entity.Product) (*entity.Product, error) {
+func (repository *ProductRepositoryImpl) Create(entity entity.Product) (*entity.Product, error) {
 
 }
 
 // Delete implements ProductRepository.
-func (*ProductRepositoryImpl) Delete(entity entity.Product) error {
+func (repository *ProductRepositoryImpl) Delete(entity entity.Product) error {
 	panic("unimplemented")
 }
 
 // FindAll implements ProductRepository.
-func (Repository *ProductRepositoryImpl) FindAll(offset int, limit int) []entity.Product {
+func (repository *ProductRepositoryImpl) FindAll(offset int, limit int) []entity.Product {
 	var products []entity.Product
 
-	Repository.db.Scopes(utils.Paginate(offset, limit)).Find(&products)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Find(&products)
 }
 
 // FindById implements ProductRepository.
-func (*ProductRepositoryImpl) FindById(id int) (*entity.Product, error) {
+func (repository *ProductRepositoryImpl) FindById(id int) (*entity.Product, error) {
 	panic("unimplemented")
 }
 
 // Update implements ProductRepository.
-func (*ProductRepositoryImpl) Update(entity entity.Product) (*entity.Product, error) {
+func (repository *ProductRepositoryImpl) Update(entity entity.Product) (*entity.Product, error) {
 	panic("unimplemented")
 }
 
