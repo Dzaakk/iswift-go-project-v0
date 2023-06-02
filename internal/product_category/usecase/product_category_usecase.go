@@ -34,8 +34,17 @@ func (usecase *ProductCategoryUseCaseImpl) Create(dto dto.ProductCategoryRequest
 }
 
 // Delete implements ProductCategoryUseCase.
-func (*ProductCategoryUseCaseImpl) Delete(id int) error {
-	panic("unimplemented")
+func (usecase *ProductCategoryUseCaseImpl) Delete(id int) error {
+	productCategory, err := usecase.repository.FindById(id)
+
+	if err != nil {
+		return err
+	}
+
+	if err := usecase.repository.Delete(*productCategory); err != nil {
+		return err
+	}
+	return nil
 }
 
 // FindAll implements ProductCategoryUseCase.
