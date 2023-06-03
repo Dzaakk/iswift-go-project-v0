@@ -5,6 +5,7 @@ import (
 	oauth "iswift-go-project/internal/oauth/injector"
 	productCategory "iswift-go-project/internal/product_category/injector"
 	profile "iswift-go-project/internal/profile/injector"
+	product "iswift-go-project/internal/product/injector"
 	register "iswift-go-project/internal/register/injector"
 	mysql "iswift-go-project/pkg/db/mysql"
 
@@ -21,6 +22,7 @@ func main() {
 	profile.InitializedService(db).Route(&r.RouterGroup)
 	admin.InitializedService(db).Route(&r.RouterGroup)
 	productCategory.InitializedService(db).Route(&r.RouterGroup)
+	product.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 
