@@ -2,6 +2,7 @@ package utils
 
 import (
 	"math/rand"
+	"path/filepath"
 
 	oauthDto "iswift-go-project/internal/oauth/dto"
 
@@ -46,4 +47,10 @@ func GetCurrentUser(ctx *gin.Context) *oauthDto.MapClaimsResponse {
 	user, _ := ctx.Get("user")
 
 	return user.(*oauthDto.MapClaimsResponse)
+}
+
+func GetFileName(filename string) string {
+	file := filepath.Base(filename)
+
+	return file[:len(file)-len(filepath.Ext(file))]
 }
