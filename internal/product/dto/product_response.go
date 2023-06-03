@@ -28,8 +28,8 @@ func CreateProductResponse(product entity.Product) ProductResponseBody {
 	return ProductResponseBody{
 		ProductCategory: product.ProductCategory,
 		Title:           product.Title,
-		Image:           product.Image,
-		Video:           product.Video,
+		Image:           *product.Image,
+		Video:           *product.Video,
 		Description:     product.Description,
 		Price:           product.Price,
 		CreatedBy:       product.CreatedBy,
@@ -46,7 +46,7 @@ func CreateProductListResponse(products []entity.Product) ProductlistResponse{
 	productResp := ProductlistResponse{}
 
 	for _, p := range products {
-		
+
 		product := CreateProductResponse(p)
 		productResp = append(productResp, product)
 	}
