@@ -41,7 +41,7 @@ func (repository *ProductRepositoryImpl) Delete(entity entity.Product) error {
 func (repository *ProductRepositoryImpl) FindAll(offset int, limit int) []entity.Product {
 	var products []entity.Product
 
-	repository.db.Scopes(utils.Paginate(offset, limit)).Find(&products)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Preload("ProductCategory").Find(&products)
 
 	return products
 }
@@ -50,7 +50,7 @@ func (repository *ProductRepositoryImpl) FindAll(offset int, limit int) []entity
 func (repository *ProductRepositoryImpl) FindById(id int) (*entity.Product, error) {
 	var product entity.Product
 
-	if err := repository.db.First(&product, id).Error; err != nil {
+	if err := repository.db.Preload("ProductCategory").First(&product, id).Error; err != nil {
 		return nil, err
 	}
 
