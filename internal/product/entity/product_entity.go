@@ -10,8 +10,8 @@ import (
 
 type Product struct {
 	ID                int64                                  `json:"id"`
-	ProductCategory   *productCategoryEntity.ProductCategory `json:"-" gorm:"foreignKey:ProductCategoryID;references:ID"`
-	ProductCategoryID int64                                  `json:"product_caategory_id"`
+	ProductCategory   *productCategoryEntity.ProductCategory `json:"product_category" gorm:"foreignKey:ProductCategoryID;references:ID"`
+	ProductCategoryID int64                                  `json:"product_category_id"`
 	Title             string                                 `json:"title"`
 	Image             *string                                `json:"image"`
 	Video             *string                                `json:"video"`
