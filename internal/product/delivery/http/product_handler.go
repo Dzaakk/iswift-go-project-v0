@@ -85,7 +85,7 @@ func (handler *ProductHanlder) Update(ctx *gin.Context) {
 	var input dto.ProductRequestBody
 
 	if err := ctx.ShouldBind(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, "bad request", "bad request"))
+		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, "bad request", err.Error()))
 		ctx.Abort()
 		return
 	}
@@ -95,7 +95,7 @@ func (handler *ProductHanlder) Update(ctx *gin.Context) {
 	data, err := handler.usecase.Update(id, input)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server error", "internal server error"))
+		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server error", err.Error()))
 		ctx.Abort()
 		return
 	}
